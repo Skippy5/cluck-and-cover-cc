@@ -5,7 +5,7 @@
  */
 
 import { sfx } from '../core/audio';
-import { drawUpgradeIcon } from '../art/sprites';
+import { drawSkipPortrait, drawUpgradeIcon } from '../art/sprites';
 import { UPGRADES, priceFor, type UpgradeId } from '../game/config';
 import type { Game } from '../game/game';
 import { getLevel } from '../game/levels';
@@ -90,15 +90,29 @@ export class Screens {
 
   private title(): void {
     const el = this.card(`
-      <div class="eyebrow">A farmyard scramble in ten fields</div>
-      <h1 class="title">Cluck <span class="amp">&amp;</span> Cover</h1>
-      <p class="subtitle">Starring Farmer Skip, who has had quite enough of this.</p>
+      <div class="hero">
+        <div class="hero-portrait">
+          <canvas width="260" height="260" data-portrait aria-label="Portrait of Farmer Skip"></canvas>
+          <div class="nameplate">Farmer Skip</div>
+        </div>
+        <div class="hero-text">
+          <div class="eyebrow">A farmyard scramble in ten fields</div>
+          <h1 class="title">Farmer Skip's<br />Cluck <span class="amp">&amp;</span> Cover</h1>
+          <dl class="dossier">
+            <dt>Age</dt><dd>Sixty-two. Do not bring it up.</dd>
+            <dt>Farming since</dt><dd>He was tall enough to reach the gate latch.</dd>
+            <dt>Knees</dt><dd>Shot. Both of them.</dd>
+            <dt>Unfinished business</dt><dd>A snake called Old Coilback, since ninety-one.</dd>
+          </dl>
+        </div>
+      </div>
       <canvas class="title-strip" aria-hidden="true"></canvas>
       <p class="lede">
-        Skip is sixty-two, his knees are shot, and he loves this farm more than he will ever
-        admit out loud. The hens are laying. A snake is helping itself. Gather the quota, run
-        the pests off, spend your coin between fields, and finish what Old Coilback started
-        back in ninety-one.
+        Skip will tell anyone who stands still long enough that he is sick of this place. He
+        is lying. He is out here every morning before the light, and he loves it more than he
+        will ever admit out loud. The hens are laying. A snake is helping itself. Gather the
+        quota, run the pests off, spend your coin between fields, and settle a thirty-five
+        year old score.
       </p>
       <div class="cols">
         <div class="col">
@@ -131,7 +145,15 @@ export class Screens {
         <button class="btn" data-start>Start the day</button>
         <span class="footer-note">Best on a laptop with a keyboard and a mouse.</span>
       </div>`);
-    this.strip = el.querySelector('canvas');
+    this.strip = el.querySelector('.title-strip');
+    const portrait = el.querySelector<HTMLCanvasElement>('[data-portrait]');
+    const pctx = portrait?.getContext('2d');
+    if (pctx) {
+      pctx.setTransform(2, 0, 0, 2, 0, 0);
+      pctx.translate(65, 68);
+      pctx.scale(1.06, 1.06);
+      drawSkipPortrait(pctx, 0);
+    }
     this.button(el, '[data-start]', () => this.game.newRun());
     el.querySelector<HTMLButtonElement>('[data-start]')?.focus();
   }

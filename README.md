@@ -1,15 +1,27 @@
-# Cluck & Cover CC
+# Farmer Skip's Cluck & Cover CC
 
 **Live:** https://cluck-and-cover-cc.vercel.app
 **Repo:** https://github.com/Skippy5/cluck-and-cover-cc
 
-Farmer Skip is sixty-two, his knees are shot, and he loves this farm more than he will
-ever admit out loud. The hens are laying faster than he can stoop, a snake has decided
-the egg basket is a buffet, and something keeps taking his chickens. Gather each field's
-quota, run the pests off with a handful of feed corn, spend your coin at the supply shed
-between fields, and settle two old scores: **Old Coilback**, the crowned snake that ate
-Skip's best hen back in ninety-one, and **Rennard the Rustler**, the fox who is six hens
-into a debt he is about to repay.
+## Farmer Skip
+
+Sixty-two years old. Farming since he was tall enough to reach the gate latch. Both knees
+shot. Straw hat that has been through three roofs, a beard he has not trimmed since the
+nineties, and a scowl you could plough with.
+
+Skip will tell anyone who stands still long enough that he is sick of this place. He is
+lying. He is out here every morning before the light, and he loves it more than he will
+ever admit out loud. He mutters at the hens, at the weather, and at his knees, and every
+line he says in this game is his.
+
+He also has unfinished business. **Old Coilback**, a crowned snake, took his best hen in
+ninety-one. **Rennard the Rustler** is six hens into a debt. Skip has been waiting.
+
+## The game
+
+The hens lay, a snake helps itself, and something keeps carrying off the flock. Gather each
+field's egg quota before the snake eats its fill, run the pests off with a handful of feed
+corn, spend your coin at the supply shed between fields, and settle both scores.
 
 Ten hand-drawn fields, two bosses, five upgrades, and one thoroughly unimpressed farmer.
 
@@ -40,11 +52,15 @@ Ten hand-drawn fields, two bosses, five upgrades, and one thoroughly unimpressed
 
 ## Rules worth knowing
 
+- The hens lay at an unhurried pace, and adding hens stretches everyone's interval rather
+  than multiplying the flood. This is a game about picking a route round the field, not
+  about scrambling after a carpet of eggs.
 - Every egg counts 1 toward the quota. Normal eggs are worth 1 point, golden 3, special 5.
 - Points are also coins. **Spending never reduces your score** — Skip keeps two ledgers.
 - Eggs picked up within 2 seconds of each other chain a combo, worth up to +5 a piece.
-- A snake that swallows an egg is slow and harmless for about a second — you can see the
-  lump travel down its body. That pause is your opening.
+- A snake that swallows an egg is slow and harmless for a couple of seconds — you can see
+  the lump travel down its body. That pause is your opening, and it is the main brake on
+  how fast the snake fills its limit.
 - Three hens lost to weasels costs a life. If the flock gets thin, a neighbour lends a hen
   so a field can never become unwinnable.
 - Bosses are briefly untouchable after each hit, so ten hits means ten separate throws.

@@ -161,6 +161,157 @@ export function drawFarmer(ctx: Ctx, look: FarmerLook): void {
   if (stunned) drawStunStars(ctx, 0, -42, phase);
 }
 
+/**
+ * Skip head-and-shoulders, drawn at a size that can carry detail: the title
+ * card, the HUD nameplate and the shop all use this. Roughly 100 units square,
+ * centred on the origin.
+ */
+export function drawSkipPortrait(ctx: Ctx, t = 0): void {
+  const breathe = Math.sin(t * 1.4) * 0.8;
+
+  // shoulders: shirt under the bib
+  ctx.beginPath();
+  ctx.moveTo(-46, 52);
+  ctx.quadraticCurveTo(-40, 20 + breathe, -16, 14 + breathe);
+  ctx.lineTo(16, 14 + breathe);
+  ctx.quadraticCurveTo(40, 20 + breathe, 46, 52);
+  ctx.closePath();
+  ink(ctx, CREAM, 3);
+  ctx.beginPath();
+  ctx.moveTo(-24, 52);
+  ctx.quadraticCurveTo(-22, 26 + breathe, 0, 22 + breathe);
+  ctx.quadraticCurveTo(22, 26 + breathe, 24, 52);
+  ctx.closePath();
+  ink(ctx, SKY_DEEP, 3);
+  limb(ctx, -19, 30 + breathe, -22, 16 + breathe, 6, SKY_DEEP);
+  limb(ctx, 19, 30 + breathe, 22, 16 + breathe, 6, SKY_DEEP);
+  circle(ctx, -17, 32 + breathe, 3.4, WHEAT, 2);
+  circle(ctx, 17, 32 + breathe, 3.4, WHEAT, 2);
+
+  const hy = -14 + breathe;
+
+  // neck
+  roundRect(ctx, 0, hy + 26, 22, 20, 6, SKIN, 3);
+
+  // ears
+  ellipse(ctx, -25, hy + 4, 5, 7, SKIN, 0, 2.6);
+  ellipse(ctx, 25, hy + 4, 5, 7, SKIN, 0, 2.6);
+
+  // face
+  ellipse(ctx, 0, hy, 25, 27, SKIN, 0, 3);
+
+  // beard: a broad spade, wider than the jaw
+  ctx.beginPath();
+  ctx.moveTo(-25, hy - 2);
+  ctx.quadraticCurveTo(-31, hy + 26, -12, hy + 40);
+  ctx.quadraticCurveTo(0, hy + 45, 12, hy + 40);
+  ctx.quadraticCurveTo(31, hy + 26, 25, hy - 2);
+  ctx.quadraticCurveTo(14, hy + 10, 0, hy + 9);
+  ctx.quadraticCurveTo(-14, hy + 10, -25, hy - 2);
+  ink(ctx, BEARD, 3);
+  pen(ctx, 1.8, BEARD_DEEP);
+  ctx.beginPath();
+  for (const x of [-13, -4.5, 4.5, 13]) {
+    ctx.moveTo(x, hy + 14);
+    ctx.quadraticCurveTo(x * 1.05, hy + 26, x * 0.75, hy + 37);
+  }
+  ctx.stroke();
+
+  // the frown
+  pen(ctx, 3, INK);
+  ctx.beginPath();
+  ctx.moveTo(-9, hy + 17);
+  ctx.quadraticCurveTo(0, hy + 12, 9, hy + 17);
+  ctx.stroke();
+
+  // nose
+  ellipse(ctx, 0, hy + 6, 9.5, 8, NOSE, 0, 3);
+  ctx.fillStyle = 'rgba(120,60,35,0.32)';
+  ctx.beginPath();
+  ctx.arc(-3.5, hy + 7, 1.7, 0, TAU);
+  ctx.arc(3.5, hy + 8.5, 1.5, 0, TAU);
+  ctx.arc(0.5, hy + 3.5, 1.4, 0, TAU);
+  ctx.fill();
+
+  // moustache: one continuous sweep that droops past the corners of the mouth
+  ctx.beginPath();
+  ctx.moveTo(-19, hy + 11);
+  ctx.quadraticCurveTo(-9, hy + 8, 0, hy + 12);
+  ctx.quadraticCurveTo(9, hy + 8, 19, hy + 11);
+  ctx.quadraticCurveTo(15, hy + 21, 6, hy + 18);
+  ctx.quadraticCurveTo(0, hy + 16, -6, hy + 18);
+  ctx.quadraticCurveTo(-15, hy + 21, -19, hy + 11);
+  ink(ctx, BEARD, 2.6);
+  pen(ctx, 1.4, BEARD_DEEP);
+  ctx.beginPath();
+  ctx.moveTo(-14, hy + 12);
+  ctx.quadraticCurveTo(-11, hy + 16, -6, hy + 17);
+  ctx.moveTo(14, hy + 12);
+  ctx.quadraticCurveTo(11, hy + 16, 6, hy + 17);
+  ctx.stroke();
+
+  // eyes: heavy lids, permanently narrowed
+  for (const s of [-1, 1]) {
+    ellipse(ctx, s * 11, hy - 3, 6.5, 4.4, '#fbf6ea', 0, 2.4);
+    ctx.fillStyle = INK;
+    ctx.beginPath();
+    ctx.arc(s * 11 + s * 1.6, hy - 2.6, 2.6, 0, TAU);
+    ctx.fill();
+    pen(ctx, 3, SKIN);
+    ctx.beginPath();
+    ctx.moveTo(s * 4.5, hy - 6);
+    ctx.lineTo(s * 18, hy - 5.5);
+    ctx.stroke();
+  }
+
+  // the eyebrows, angled hard down toward the nose
+  pen(ctx, 6.5, BEARD);
+  ctx.beginPath();
+  ctx.moveTo(-21, hy - 15);
+  ctx.lineTo(-4, hy - 8);
+  ctx.moveTo(21, hy - 15);
+  ctx.lineTo(4, hy - 8);
+  ctx.stroke();
+
+  // crow's feet — sixty-two years of squinting into the sun
+  pen(ctx, 1.6, '#b07d55');
+  ctx.beginPath();
+  for (const s of [-1, 1]) {
+    ctx.moveTo(s * 20, hy - 1);
+    ctx.lineTo(s * 25, hy - 3);
+    ctx.moveTo(s * 20, hy + 2);
+    ctx.lineTo(s * 25, hy + 1.5);
+  }
+  ctx.stroke();
+
+  // straw hat
+  ctx.beginPath();
+  ctx.moveTo(-25, hy - 18);
+  ctx.quadraticCurveTo(-22, hy - 52, 0, hy - 53);
+  ctx.quadraticCurveTo(22, hy - 52, 25, hy - 18);
+  ctx.closePath();
+  ink(ctx, WHEAT, 3);
+  ctx.beginPath();
+  ctx.moveTo(-24.6, hy - 22);
+  ctx.quadraticCurveTo(0, hy - 32, 24.6, hy - 22);
+  pen(ctx, 9, BARN_DEEP);
+  ctx.stroke();
+  ellipse(ctx, 0, hy - 18, 46, 11, WHEAT, 0, 3);
+  pen(ctx, 1.4, WHEAT_DEEP);
+  ctx.beginPath();
+  for (let i = -4; i <= 4; i++) {
+    ctx.moveTo(i * 10, hy - 24);
+    ctx.lineTo(i * 11.2, hy - 12);
+  }
+  ctx.stroke();
+  // a bent brim, because it is not a new hat
+  pen(ctx, 2, WHEAT_DEEP);
+  ctx.beginPath();
+  ctx.moveTo(-46, hy - 18);
+  ctx.quadraticCurveTo(0, hy - 11, 46, hy - 18);
+  ctx.stroke();
+}
+
 function drawStunStars(ctx: Ctx, x: number, y: number, phase: number): void {
   for (let i = 0; i < 3; i++) {
     const a = phase * 2.5 + (i * TAU) / 3;

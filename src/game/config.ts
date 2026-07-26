@@ -24,14 +24,22 @@ export const CONFIG = {
   chickenStart: 2,
   chickenMax: 8,
   chickenRadius: 11,
-  layMin: 1.0,
-  layMax: 3.0,
-  layScalePerLevel: 0.85,
-  layFloorMin: 0.5,
-  layFloorMax: 1.5,
+  // Laying cadence. Deliberately unhurried: Skip is sixty-two and the game is
+  // about choosing a route round the field, not about scrambling after a flood.
+  layMin: 2.2,
+  layMax: 4.4,
+  layScalePerLevel: 0.94,
+  layFloorMin: 1.4,
+  layFloorMax: 2.8,
+  /**
+   * Each hen past the starting pair stretches everyone's interval. Without this
+   * a full flock of eight lays four times faster than a pair and the field
+   * turns into a carpet of eggs.
+   */
+  layFlockSpread: 0.2,
   eggRadius: 8,
   pickupRadius: 21,
-  eggCap: 40, // safety net so a parked player cannot flood the field
+  eggCap: 18, // safety net so a parked player cannot flood the field
   eggFreezeTime: 12, // Frostfallow only
 
   // --- corn
@@ -49,8 +57,12 @@ export const CONFIG = {
   snakeEggChance: 0.7,
   snakeRetarget: 1.6,
   snakeCornPoints: 5,
-  /** A snake that has just swallowed an egg is slow and harmless for a moment. */
-  snakeSwallowTime: 1.15,
+  /**
+   * A snake that has just swallowed an egg is slow and harmless while it gets
+   * the thing down. This is the main brake on how fast it fills its limit, so
+   * it is tuned against the laying rate above, not chosen for flavour.
+   */
+  snakeSwallowTime: 2.4,
   snakeSwallowSpeed: 0.3,
   /** Bosses are briefly untouchable after a hit, so a spread counts once. */
   bossHitCooldown: 0.42,

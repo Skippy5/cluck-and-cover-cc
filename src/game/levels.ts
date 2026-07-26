@@ -173,14 +173,42 @@ export const worldSizeFor = (n: number): { w: number; h: number } => ({
   h: CONFIG.worldBaseH + CONFIG.worldGrowH * (n - 1),
 });
 
-/** Egg cadence tightens every level, down to a floor. */
-export const layRangeFor = (n: number): [number, number] => {
+/**
+ * Egg cadence. It tightens a little each level down to a floor, then relaxes
+ * again with flock size so eight hens never lay four times faster than two.
+ */
+export const layRangeFor = (n: number, flock: number = CONFIG.chickenStart): [number, number] => {
   const scale = Math.pow(CONFIG.layScalePerLevel, n - 1);
+  const spread = 1 + CONFIG.layFlockSpread * Math.max(0, flock - CONFIG.chickenStart);
   return [
-    Math.max(CONFIG.layFloorMin, CONFIG.layMin * scale),
-    Math.max(CONFIG.layFloorMax, CONFIG.layMax * scale),
+    Math.max(CONFIG.layFloorMin, CONFIG.layMin * scale) * spread,
+    Math.max(CONFIG.layFloorMax, CONFIG.layMax * scale) * spread,
   ];
 };
+
+/**
+ * Skip mutters. He is not talking to you; he has been talking to this farm
+ * since before you were born and sees no reason to stop now.
+ */
+export const SKIP_BARKS = {
+  idle: [
+    'Forty years. Every morning.',
+    'My knees are filing a complaint.',
+    'Nobody else is going to do it.',
+    'Good dirt, this. Always was.',
+    'Quit your clucking.',
+    'Said I would retire. I lied.',
+    'Where in blazes is my other glove.',
+    'Back in my day the hens waited.',
+    'Do not tell me it is going to rain.',
+    'I like this bit. Not that it is anyone else business.',
+  ],
+  quotaClose: ['Nearly there. Do not gloat.', 'One more and I am sitting down.'],
+  henLost: ['That one was DORIS.', 'You owe me a hen.', 'Forty years I kept that flock.'],
+  powerup: ['Well. That helps.', 'About time something went right.'],
+  bossHit: ['Ninety-one. I remember.', 'Hold still, you.', 'I have waited a long while for this.'],
+  lowLives: ['Last pair of overalls.', 'Right. No more messing about.'],
+} as const;
 
 /** Skip's running commentary as the combo climbs. */
 export const COMBO_CALLOUTS: { at: number; text: string; shake: number }[] = [

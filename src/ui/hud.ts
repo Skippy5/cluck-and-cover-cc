@@ -4,7 +4,7 @@
  * canvases, so nothing in the interface is a font glyph pretending to be art.
  */
 
-import { drawLifePip, drawPowerIcon, type PowerKind } from '../art/sprites';
+import { drawLifePip, drawPowerIcon, drawSkipPortrait, type PowerKind } from '../art/sprites';
 import { CONFIG } from '../game/config';
 import type { Game } from '../game/game';
 
@@ -69,6 +69,13 @@ export class Hud {
           </div>
         </div>
         <div class="panel stat-panel">
+          <div class="who">
+            <canvas width="112" height="112" data-portrait aria-hidden="true"></canvas>
+            <div>
+              <div class="label">Farmer</div>
+              <div class="who-name">Skip</div>
+            </div>
+          </div>
           <span class="label">Score</span><span class="num" data-score>0</span>
           <span class="label">Coins</span><span class="num" data-coins>0</span>
           <div class="lives" data-lives></div>
@@ -104,6 +111,15 @@ export class Hud {
     this.powerBar = q('[data-power-bar]');
     this.powerIcon = q<HTMLCanvasElement>('[data-power-icon]');
     this.comboTag = q('[data-combo]');
+
+    const portrait = q<HTMLCanvasElement>('[data-portrait]');
+    const pctx = portrait.getContext('2d');
+    if (pctx) {
+      pctx.setTransform(2, 0, 0, 2, 0, 0);
+      pctx.translate(28, 32);
+      pctx.scale(0.46, 0.46);
+      drawSkipPortrait(pctx, 0);
+    }
 
     for (let i = 0; i < CONFIG.maxLives; i++) {
       const c = document.createElement('canvas');

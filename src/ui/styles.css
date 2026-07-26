@@ -168,6 +168,31 @@ body {
   align-items: center;
 }
 
+/* Skip's nameplate: he is the one doing the work, so he gets top billing. */
+.who {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 5px;
+  margin-bottom: 4px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.who canvas {
+  width: 38px;
+  height: 38px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--cream-deep);
+}
+
+.who-name {
+  font: var(--display);
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
 .stat-panel .num {
   font: var(--display);
   font-size: 1.2rem;
@@ -302,6 +327,72 @@ body {
   height: 3px;
   background: var(--ink);
   margin: 14px 0;
+}
+
+/* ---------------- Title hero ---------------- */
+
+.hero {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.hero-portrait {
+  flex: 0 0 auto;
+  width: 130px;
+}
+
+.hero-portrait canvas {
+  display: block;
+  width: 130px;
+  height: 130px;
+  border: var(--edge);
+  border-radius: 4px;
+  background: var(--cream-deep);
+  box-shadow: var(--lift);
+}
+
+.nameplate {
+  font: var(--display);
+  font-size: 0.92rem;
+  text-align: center;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--cream);
+  border-radius: 0 0 3px 3px;
+  padding: 4px 6px;
+  margin-top: -1px;
+  width: 130px;
+}
+
+.hero-text {
+  flex: 1 1 300px;
+  min-width: 260px;
+}
+
+.dossier {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 12px;
+  margin: 12px 0 0;
+  font-size: 0.8rem;
+}
+
+.dossier dt {
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.62rem;
+  color: var(--ink-soft);
+  align-self: center;
+}
+
+.dossier dd {
+  margin: 0;
+  color: var(--ink-soft);
 }
 
 .title-strip {

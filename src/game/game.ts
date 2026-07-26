@@ -23,6 +23,7 @@ import type { PowerKind } from '../art/sprites';
 import { CONFIG, EGG_KINDS, POWER_WEIGHTS, UPGRADES, priceFor, type UpgradeId } from './config';
 import {
   COMBO_CALLOUTS,
+  SKIP_BARKS,
   chickenCountFor,
   getLevel,
   layRangeFor,
@@ -123,7 +124,26 @@ export class Game {
   private powerTimer = 0;
   private appleTimer = 0;
   private chickenRespawn = 0;
-  private layRange: [number, number] = [1, 3];
+  private barkTimer = 7;
+  private barkCooldown = 0;
+  private barkedQuotaClose = false;
+  private barkedLowLives = false;
+
+  /**
+   * Put a line of Skip's muttering over his head. Rate-limited so his
+   * grumbling never fights the score popups for space.
+   */
+  private bark(lines: readonly string[], force = false): void {
+    if (this.barkCooldown > 0 && !force) return;
+    this.barkCooldown = 4;
+    this.barkTimer = rand(12, 20);
+    this.fx.text(this.farmer.x, this.farmer.y - 60, pick(lines), '#f4e5c3', 16);
+  }
+
+  /** Lay interval for the level, relaxed by how many hens are on the field. */
+  private layRange(): [number, number] {
+    return layRangeFor(this.level, this.chickens.length);
+  }
 
   /* ---------------------------------------------------------------- */
   /* Lifecycle                                                         */
@@ -160,7 +180,6 @@ export class Game {
     this.eggsThisLevel = 0;
     this.snakeEggs = 0;
     this.weaselLosses = 0;
-    this.layRange = layRangeFor(n);
 
     this.farmer = makeFarmer(this.worldW / 2, this.worldH / 2);
     this.eggs = [];
@@ -198,6 +217,10 @@ export class Game {
 
     this.dog = this.upgrades.dog > 0 ? this.makeDog() : null;
 
+    this.barkTimer = 7;
+    this.barkCooldown = 0;
+    this.barkedQuotaClose = false;
+    this.barkedLowLives = false;
     this.roosterTimer = CONFIG.roosterInterval * 0.6;
     this.weaselTimer = CONFIG.weaselInterval * 0.7;
     this.powerTimer = CONFIG.powerupInterval * 0.5;
@@ -213,7 +236,7 @@ export class Game {
     const spot = findClearSpot(this.obstacles, this.worldW, this.worldH, CONFIG.chickenRadius, [
       { x: this.farmer.x, y: this.farmer.y, r: 60 },
     ]);
-    const [lo, hi] = this.layRange;
+    const [lo, hi] = this.layRange();
     this.chickens.push({
       x: spot.x,
       y: spot.y,
@@ -322,7 +345,30 @@ export class Game {
     this.updateKernels(dt);
     this.updatePowerups(dt);
     this.updateCombo(dt);
+    this.updateBarks(dt);
     this.checkLevelEnd();
+  }
+
+  private updateBarks(dt: number): void {
+    this.barkCooldown = Math.max(0, this.barkCooldown - dt);
+    this.barkTimer -= dt;
+
+    if (!this.barkedLowLives && this.lives === 1) {
+      this.barkedLowLives = true;
+      this.bark(SKIP_BARKS.lowLives, true);
+      return;
+    }
+    if (
+      !this.barkedQuotaClose &&
+      !this.levelDef.boss &&
+      this.quota > 0 &&
+      this.quota - this.eggsThisLevel === 1
+    ) {
+      this.barkedQuotaClose = true;
+      this.bark(SKIP_BARKS.quotaClose);
+      return;
+    }
+    if (this.barkTimer <= 0) this.bark(SKIP_BARKS.idle);
   }
 
   /* --- Farmer ------------------------------------------------------ */
@@ -390,7 +436,7 @@ export class Game {
   /* --- Chickens & eggs --------------------------------------------- */
 
   private updateChickens(dt: number): void {
-    const [lo, hi] = this.layRange;
+    const [lo, hi] = this.layRange();
     for (const c of this.chickens) {
       if (c.taken) continue;
       c.retarget -= dt;
@@ -754,6 +800,7 @@ export class Game {
         this.shake = Math.max(this.shake, 4);
         sfx.hurt();
         this.fx.text(w.x, w.y - 20, 'HEN DOWN', '#c1543a', 18);
+        this.bark(SKIP_BARKS.henLost, true);
         if (this.weaselLosses >= CONFIG.chickenLossLimit) {
           this.weaselLosses = 0;
           this.hurtFarmer('Three hens to the weasels. Skip took that personally.');
@@ -1044,6 +1091,7 @@ export class Game {
         this.fx.burst(k.x, k.y, FX_BLOOD, 14, { speed: 190 });
         this.fx.text(s.x, s.y - 34, `${Math.max(0, s.hp)} LEFT`, '#f4e5c3', 18);
         sfx.bossHit();
+        this.bark(SKIP_BARKS.bossHit);
         if (s.hp <= 0) this.bossDown(s.x, s.y);
       } else {
         this.award(CONFIG.snakeCornPoints, s.x, s.y, 'BACK OFF');
@@ -1151,6 +1199,7 @@ export class Game {
         this.powerups.splice(i, 1);
         this.fx.burst(p.x, p.y, FX_GOLD, 16, { speed: 190 });
         this.fx.text(p.x, p.y - 20, POWER_LABEL[p.kind], '#f4e5c3', 18);
+        this.bark(SKIP_BARKS.powerup);
         sfx.powerup();
       }
     }

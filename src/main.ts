@@ -1,5 +1,5 @@
 /**
- * Cluck & Cover CC — entry point.
+ * Farmer Skip's Cluck & Cover CC — entry point.
  *
  * Owns the canvas, the frame loop and the global key bindings, and wires the
  * simulation (`Game`) to the two presentation layers (canvas `render`, DOM
@@ -127,5 +127,12 @@ if (import.meta.env.DEV) {
       input.endFrame();
     }
   };
-  (window as unknown as { __cluck: unknown }).__cluck = { game, input, hud, screens, step, destroy };
+  // Same simulation without the draw call, for fast headless balance runs.
+  const stepSim = (frames = 1, dt = 1 / 60): void => {
+    for (let i = 0; i < frames; i++) {
+      game.update(dt, input);
+      input.endFrame();
+    }
+  };
+  (window as unknown as { __cluck: unknown }).__cluck = { game, input, hud, screens, step, stepSim, destroy };
 }
