@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#2a2118" />
+    <meta
+      name="description"
+      content="Cluck &amp; Cover CC — help Farmer Skip gather eggs, out-run Old Coilback, and run off the fox bandit across ten hand-drawn farmyard levels."
+    />
+    <title>Cluck &amp; Cover CC</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <!-- The game mounts here: a canvas for the farmyard, DOM layers for HUD and screens. -->
+    <div id="app" class="app">
+      <canvas id="stage" class="stage" aria-label="Farmyard playfield"></canvas>
+      <div id="hud" class="hud" aria-live="off"></div>
+      <div id="overlay" class="overlay"></div>
+    </div>
+    <noscript>
+      <p style="font: 16px system-ui; padding: 2rem">Cluck &amp; Cover CC needs JavaScript enabled.</p>
+    </noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
